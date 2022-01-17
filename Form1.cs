@@ -11,6 +11,7 @@ namespace MyPaint
 
         Point lastPoint;
         bool isPenDown;
+        bool isPenActive = false;
 
         public MyPaint()
         {
@@ -71,9 +72,27 @@ namespace MyPaint
             }
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (bitmap != null)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                pictureBox1.Image = bitmap;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (bitmap != null)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                pictureBox1.Image = bitmap;
+            }
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            
+            isPenActive = true;
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -88,7 +107,7 @@ namespace MyPaint
             Point point = e.Location;
             Pen pen = new Pen(colorDialog1.Color);
 
-            if (isPenDown)
+            if (isPenDown && isPenActive)
             {
                 if (lastPoint != null)
                 {
@@ -111,5 +130,7 @@ namespace MyPaint
 
             }
         }
+
+
     }
 }
