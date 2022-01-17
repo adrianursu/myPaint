@@ -86,7 +86,7 @@ namespace MyPaint
         {
             Graphics graphics = pictureBox1.CreateGraphics();
             Point point = e.Location;
-            Pen pen = new Pen(Color.Red);
+            Pen pen = new Pen(colorDialog1.Color);
 
             if (isPenDown)
             {
@@ -101,6 +101,15 @@ namespace MyPaint
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             isPenDown = false;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Color color = colorDialog1.Color;
+
+            }
         }
     }
 }
