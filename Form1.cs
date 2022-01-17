@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyPaint
 {
     public partial class MyPaint : Form
     {
+        Bitmap bitmap;
+
+        Point lastPoint;
+        bool isPenDown;
+
         public MyPaint()
         {
             InitializeComponent();
@@ -45,8 +45,8 @@ namespace MyPaint
             
             openFileDialog.ShowDialog();
 
-            Image image = Bitmap.FromFile(openFileDialog.FileName);
-            pictureBox1.Image = image;
+            bitmap = (Bitmap) Bitmap.FromFile(openFileDialog.FileName);
+            pictureBox1.Image = bitmap;
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60,6 +60,47 @@ namespace MyPaint
         {
             pictureBox1.Image.Dispose();
             pictureBox1.Image = null;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (bitmap != null)
+            {
+              bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+              pictureBox1.Image = bitmap;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            lastPoint = e.Location; 
+            isPenDown = true;
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            Graphics graphics = pictureBox1.CreateGraphics();
+            Point point = e.Location;
+            Pen pen = new Pen(Color.Red);
+
+            if (isPenDown)
+            {
+                if (lastPoint != null)
+                {
+                    graphics.DrawLine(pen, lastPoint, point);
+                }
+                lastPoint = point;
+            }
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            isPenDown = false;
         }
     }
 }
