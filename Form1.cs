@@ -11,7 +11,6 @@ namespace MyPaint
 
         Point startPoint;
         Point finishPoint;
-        Rectangle rect;
 
         bool isPenDown;
         bool isFreeDrawActive = false;
@@ -114,8 +113,6 @@ namespace MyPaint
         {
             startPoint = e.Location; 
             isPenDown = true;
-
-            
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -134,10 +131,6 @@ namespace MyPaint
                 }
                 startPoint = finishPoint;
             }
-          //else if (isRectangleActive && isPenDown)
-          //{
-          //   graphics.DrawRectangle(pen, Math.Min(startPoint.X, finishPoint.X), Math.Min(startPoint.Y, finishPoint.Y), Math.Abs(finishPoint.X - startPoint.X), Math.Abs(finishPoint.Y - startPoint.Y));
-          //  }
         }
       
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -179,23 +172,15 @@ namespace MyPaint
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 Color color = colorDialog1.Color;
-
             }
         }
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-           // pictureBox1.Invalidate();   
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            //Pen pen = new Pen(colorDialog1.Color);
-
-            //if (isRectangleActive)
-            //{
-             //   e.Graphics.DrawRectangle(pen, Math.Min(startPoint.X, finishPoint.X), Math.Min(startPoint.Y, finishPoint.Y), Math.Abs(finishPoint.X - startPoint.X), Math.Abs(finishPoint.Y - startPoint.Y));
-           // }
         }
     }
 }
