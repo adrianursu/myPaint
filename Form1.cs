@@ -48,19 +48,19 @@ namespace MyPaint
                 InitialDirectory = "C://Desktop",
                 Title = "Select file to be upload",
                 Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png"
-        };
+            };
             
-            openFileDialog.ShowDialog();
-
-            bitmap = (Bitmap) Bitmap.FromFile(openFileDialog.FileName);
-            pictureBox1.Image = bitmap;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                bitmap = (Bitmap)Bitmap.FromFile(openFileDialog.FileName);
+                pictureBox1.Image = bitmap;
+            }
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 form2 = new Form2();
             form2.ShowDialog();
-
         }
 
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -127,7 +127,6 @@ namespace MyPaint
             Pen pen = new Pen(colorDialog1.Color, penWidth);
             Pen eraserPen = new Pen(Color.White, penWidth);
 
-
             if (isPenDown && isFreeDrawActive)
             {
                 if (startPoint != null)
@@ -171,6 +170,7 @@ namespace MyPaint
             isElipseActive = true;
             isFreeDrawActive = false;
             isRectangleActive = false;
+            isEraserActive = false;
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -178,6 +178,7 @@ namespace MyPaint
             isRectangleActive = true;
             isElipseActive = false;
             isFreeDrawActive = false;
+            isEraserActive = false;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -206,9 +207,11 @@ namespace MyPaint
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
-            saveFileDialog.Title = "Save an Image File";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png",
+                Title = "Save an Image File"
+            };
             saveFileDialog.ShowDialog();
 
             if(saveFileDialog.FileName != "")
