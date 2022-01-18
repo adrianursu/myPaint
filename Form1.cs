@@ -221,11 +221,11 @@ namespace MyPaint
                 switch(saveFileDialog.FilterIndex)
                 {
                     case 1:
-                        this.pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
                         break;
 
                     case 2:
-                        this.pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Png);
                         break;
                 }
                 file.Close();
