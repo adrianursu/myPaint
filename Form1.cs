@@ -13,10 +13,10 @@ namespace MyPaint
         Point finishPoint;
 
         bool isPenDown;
-        bool isFreeDrawActive = false;
-        bool isElipseActive = false;
-        bool isRectangleActive = false;
-        bool isEraserActive = false;
+        bool isFreeDrawActive;
+        bool isElipseActive;
+        bool isRectangleActive;
+        bool isEraserActive;
 
 
         public MyPaint()
@@ -120,9 +120,9 @@ namespace MyPaint
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             finishPoint = e.Location;
-            Graphics graphics = pictureBox1.CreateGraphics();
-
-           float penWidth = (float)trackBar1.Value;
+             Graphics graphics = pictureBox1.CreateGraphics();
+            //Graphics graphics = Graphics.FromImage(pictureBox1.Image);
+            float penWidth = (float)trackBar1.Value;
 
             Pen pen = new Pen(colorDialog1.Color, penWidth);
             Pen eraserPen = new Pen(Color.White, penWidth);
@@ -214,10 +214,10 @@ namespace MyPaint
             };
             saveFileDialog.ShowDialog();
 
-            if(saveFileDialog.FileName != "")
+            if(saveFileDialog.FileName != "" && pictureBox1.Image != null)
             {
                 System.IO.FileStream file = (System.IO.FileStream)saveFileDialog.OpenFile();
-
+                
                 switch(saveFileDialog.FilterIndex)
                 {
                     case 1:
