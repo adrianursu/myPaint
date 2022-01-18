@@ -122,8 +122,10 @@ namespace MyPaint
             finishPoint = e.Location;
             Graphics graphics = pictureBox1.CreateGraphics();
 
-            Pen pen = new Pen(colorDialog1.Color);
-            Pen eraserPen = new Pen(Color.White, 10);
+           float penWidth = (float)trackBar1.Value;
+
+            Pen pen = new Pen(colorDialog1.Color, penWidth);
+            Pen eraserPen = new Pen(Color.White, penWidth);
 
 
             if (isPenDown && isFreeDrawActive)
@@ -150,7 +152,7 @@ namespace MyPaint
             finishPoint = e.Location;
 
             Graphics graphics = pictureBox1.CreateGraphics();
-            Pen pen = new Pen(colorDialog1.Color);
+            Pen pen = new Pen(colorDialog1.Color, (float)trackBar1.Value);
 
             if (isRectangleActive)
             {
