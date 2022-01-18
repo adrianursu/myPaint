@@ -16,6 +16,7 @@ namespace MyPaint
         bool isFreeDrawActive = false;
         bool isElipseActive = false;
         bool isRectangleActive = false;
+        bool isEraserActive = false;
 
 
         public MyPaint()
@@ -107,6 +108,7 @@ namespace MyPaint
             isFreeDrawActive = true;
             isRectangleActive = false;
             isElipseActive = false;
+            isEraserActive = false;
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -121,6 +123,7 @@ namespace MyPaint
             Graphics graphics = pictureBox1.CreateGraphics();
 
             Pen pen = new Pen(colorDialog1.Color);
+            Pen eraserPen = new Pen(Color.White, 10);
 
 
             if (isPenDown && isFreeDrawActive)
@@ -128,6 +131,14 @@ namespace MyPaint
                 if (startPoint != null)
                 {
                     graphics.DrawLine(pen, startPoint, finishPoint);
+                }
+                startPoint = finishPoint;
+            }
+            else if (isPenDown && isEraserActive)
+            {
+                if (startPoint != null)
+                {
+                    graphics.DrawLine(eraserPen, startPoint, finishPoint);
                 }
                 startPoint = finishPoint;
             }
@@ -181,6 +192,14 @@ namespace MyPaint
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            isEraserActive = true;
+            isElipseActive = false;
+            isFreeDrawActive = false;
+            isRectangleActive = false;
         }
     }
 }
