@@ -203,5 +203,30 @@ namespace MyPaint
             isFreeDrawActive = false;
             isRectangleActive = false;
         }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
+            saveFileDialog.Title = "Save an Image File";
+            saveFileDialog.ShowDialog();
+
+            if(saveFileDialog.FileName != "")
+            {
+                System.IO.FileStream file = (System.IO.FileStream)saveFileDialog.OpenFile();
+
+                switch(saveFileDialog.FilterIndex)
+                {
+                    case 1:
+                        this.pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        break;
+
+                    case 2:
+                        this.pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        break;
+                }
+                file.Close();
+            }
+        }
     }
 }
