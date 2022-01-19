@@ -92,5 +92,50 @@
   <ItemGroup>
     <None Include="Resources\pngtree-pure-white-minimalist-background-wallpaper-image_396581.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-pen-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-flip-horizontal-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-eraser-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-eraser-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-color-wheel-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-rotate-camera-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-rotate-right-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-rotate-left-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-rotate-right-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-ellipse-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-rectangle-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-crop-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-zoom-in-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-zoom-out-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-flip-vertical-30.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
