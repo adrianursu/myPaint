@@ -183,16 +183,6 @@ namespace MyPaint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_rotate_right_30 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-rotate-right-30", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap icons8_zoom_in_30 {
             get {
                 object obj = ResourceManager.GetObject("icons8-zoom-in-30", resourceCulture);
@@ -206,16 +196,6 @@ namespace MyPaint.Properties {
         internal static System.Drawing.Bitmap icons8_zoom_out_30 {
             get {
                 object obj = ResourceManager.GetObject("icons8-zoom-out-30", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap pngtree_pure_white_minimalist_background_wallpaper_image_396581 {
-            get {
-                object obj = ResourceManager.GetObject("pngtree-pure-white-minimalist-background-wallpaper-image_396581", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

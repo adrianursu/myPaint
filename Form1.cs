@@ -20,14 +20,6 @@ namespace MyPaint
         bool isEraserActive;
         bool isCropActive;
 
-        //For Crop
-        //int cropX;
-        //int cropY;
-        //int cropWidth;
-        //int cropHeight;
-        //int oCropX;
-        //int oCropY;
-
         public Pen cropPen;
         public DashStyle cropDashStyle = DashStyle.DashDot;
 
@@ -129,15 +121,6 @@ namespace MyPaint
         {
             startPoint = e.Location; 
             isPenDown = true;
-
-            //if (isCropActive)
-            //{
-            //    Cursor = Cursors.Cross;
-            //    cropX = startPoint.X;
-            //    cropY = startPoint.Y;
-            //    cropPen = new Pen(Color.Black, 1);
-            //    cropPen.DashStyle = DashStyle.Dot;
-            //}
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -165,15 +148,6 @@ namespace MyPaint
                 }
                 startPoint = finishPoint;
             }
-            //else if (isPenDown && isCropActive)
-            //{
-            //    if (pictureBox1.Image == null)
-            //        return;
-            //    pictureBox1.Refresh();
-            //    cropWidth = finishPoint.X - cropX;
-            //    cropHeight = finishPoint.Y - cropY;
-            //    graphics.DrawRectangle(cropPen, cropX, cropY, cropWidth, cropHeight);
-            //}
         }
       
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -275,16 +249,45 @@ namespace MyPaint
             isRectangleActive = false;
         }
 
+        private double zoom = 1.02;
         private void btnZoomIn_Click(object sender, EventArgs e)
         {
-            zoom+=0.02;
-            pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
-            pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
+            if (pictureBox1.Image != null)
+            {
+                zoom *= 1.05;
+                pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
+                pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
+            }
         }
-        private double zoom = 1.02;
+
+        private void btnZoomOut_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image != null)
+            {
+                zoom /= 1.05;
+                pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
+                pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
+            }
+        }
+
         void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
         {
-           
+            if (pictureBox1.Image != null)
+            {
+                if (e.Delta > 0)
+                {
+                    zoom *= 1.03;
+                }
+                else
+                {
+                    if (zoom != 1.0)
+                    {
+                        zoom /= 1.03;
+                    }
+                }
+                pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
+                pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
+            }
         }
 
 
@@ -297,5 +300,6 @@ namespace MyPaint
                 pictureBox1.Image = bitmap;
             }
         }
+
     }
 }
