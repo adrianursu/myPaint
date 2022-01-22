@@ -1,17 +1,23 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 namespace MyPaint
 {
     public partial class MyPaint : Form
     {
-        Image bitmap;
+        Bitmap bitmap;
 
-        Point startPoint;
-        Point finishPoint;
+
+        Action? action;
+
+        Point currentPoint;
+        Point previousPoint;
 
         bool isPenDown;
         bool isFreeDrawActive;
@@ -20,28 +26,19 @@ namespace MyPaint
         bool isEraserActive;
         bool isCropActive;
 
-        public Pen cropPen;
-        public DashStyle cropDashStyle = DashStyle.DashDot;
-
+        public Pen pen;
 
         public MyPaint()
         {
             InitializeComponent();
-        }
-
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
+            bitmap = new Bitmap(pictureBox.ClientSize.Width, pictureBox.ClientSize.Height);
+            pictureBox.Image = bitmap;
+            action = null;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close(); 
+            this.Close();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -54,11 +51,12 @@ namespace MyPaint
                 Title = "Select file to be upload",
                 Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png"
             };
-            
+
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 bitmap = (Bitmap)Bitmap.FromFile(openFileDialog.FileName);
-                pictureBox1.Image = bitmap;
+                pictureBox.Image = bitmap;
+                pictureBox.Refresh();
             }
         }
 
@@ -70,10 +68,10 @@ namespace MyPaint
 
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(pictureBox1.Image != null)
+            if (pictureBox.Image != null)
             {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
+                pictureBox.Image.Dispose();
+                pictureBox.Image = null;
             }
             else
             {
@@ -85,8 +83,8 @@ namespace MyPaint
         {
             if (bitmap != null)
             {
-              bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
-              pictureBox1.Image = bitmap;
+                bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+                pictureBox.Image = bitmap;
             }
         }
 
@@ -95,7 +93,7 @@ namespace MyPaint
             if (bitmap != null)
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                pictureBox1.Image = bitmap;
+                pictureBox.Image = bitmap;
             }
         }
 
@@ -104,12 +102,14 @@ namespace MyPaint
             if (bitmap != null)
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                pictureBox1.Image = bitmap;
+                pictureBox.Image = bitmap;
             }
         }
 
         private void btnFreeDraw_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.Default;
+            action = Action.FreeDraw;
             isFreeDrawActive = true;
             isRectangleActive = false;
             isElipseActive = false;
@@ -117,61 +117,109 @@ namespace MyPaint
             isCropActive = false;
         }
 
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            startPoint = e.Location; 
+            currentPoint = e.Location;
             isPenDown = true;
+
+
+            pictureBox.Refresh();
         }
 
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            finishPoint = e.Location;
-            Graphics graphics = pictureBox1.CreateGraphics();
-            float penWidth = (float)trackBar1.Value;
-
-            Pen pen = new Pen(colorDialog1.Color, penWidth);
-            Pen eraserPen = new Pen(Color.White, penWidth);
-
-            if (isPenDown && isFreeDrawActive)
+            if (isPenDown)
             {
-                if (startPoint != null)
+                previousPoint = e.Location;
+
+                Graphics graphics = Graphics.FromImage(pictureBox.Image);
+                float penWidth = (float)trackBar1.Value;
+
+                switch (action)
                 {
-                    graphics.DrawLine(pen, startPoint, finishPoint);
+                    case Action.FreeDraw: DrawLine(graphics, new Pen(colorDialog1.Color, penWidth)); break;
+                    case Action.Eraser: DrawLine(graphics, new Pen(Color.White, penWidth)); break;
+                    case Action.Rectangle: DrawRectanglePreview(e.Location); break;
+                    case Action.Elipse: DrawElipsisPreview(e.Location); break;
                 }
-                startPoint = finishPoint;
-            }
-            else if (isPenDown && isEraserActive)
-            {
-                if (startPoint != null)
-                {
-                    graphics.DrawLine(eraserPen, startPoint, finishPoint);
-                }
-                startPoint = finishPoint;
             }
         }
-      
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+
+        private void DrawRectanglePreview(Point point)
+        {
+            pictureBox.Refresh();
+            pictureBox.CreateGraphics().DrawRectangle(
+                GetPreviewPen(),
+                Math.Min(currentPoint.X, previousPoint.X),
+                Math.Min(currentPoint.Y, previousPoint.Y),
+                Math.Abs(previousPoint.X - currentPoint.X),
+                Math.Abs(previousPoint.Y - currentPoint.Y)
+            );
+        }
+
+        private void DrawElipsisPreview(Point point)
+        {
+            pictureBox.Refresh();
+            pictureBox.CreateGraphics().DrawEllipse(
+                GetPreviewPen(),
+                Math.Min(currentPoint.X, previousPoint.X),
+                Math.Min(currentPoint.Y, previousPoint.Y),
+                Math.Abs(previousPoint.X - currentPoint.X),
+                Math.Abs(previousPoint.Y - currentPoint.Y)
+            );
+        }
+
+        private Pen GetPreviewPen()
+        {
+            pen = new Pen(Color.Black, 2);
+            pen.DashStyle = DashStyle.DashDotDot;
+            return pen;
+        }
+
+        private void DrawLine(Graphics graphics, Pen pen)
+        {
+            graphics.DrawLine(pen, currentPoint, previousPoint);
+            currentPoint = previousPoint;
+            pictureBox.Refresh();
+        }
+
+        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             isPenDown = false;
-            finishPoint = e.Location;
 
-            Graphics graphics = pictureBox1.CreateGraphics();
+            Graphics graphics = Graphics.FromImage(pictureBox.Image);
             Pen pen = new Pen(colorDialog1.Color, (float)trackBar1.Value);
 
-            if (isRectangleActive)
+            switch (action)
             {
-                graphics.DrawRectangle(pen, Math.Min(startPoint.X, finishPoint.X), Math.Min(startPoint.Y, finishPoint.Y), Math.Abs(finishPoint.X - startPoint.X), Math.Abs(finishPoint.Y - startPoint.Y));
+                case Action.Rectangle:
+                    graphics.DrawRectangle(
+                        pen,
+                        Math.Min(currentPoint.X, previousPoint.X),
+                        Math.Min(currentPoint.Y, previousPoint.Y),
+                        Math.Abs(previousPoint.X - currentPoint.X),
+                        Math.Abs(previousPoint.Y - currentPoint.Y)
+                    );
+                    break;
 
+                case Action.Elipse:
+                    graphics.DrawEllipse(
+                        pen,
+                        Math.Min(currentPoint.X, previousPoint.X),
+                        Math.Min(currentPoint.Y, previousPoint.Y),
+                        Math.Abs(previousPoint.X - currentPoint.X),
+                        Math.Abs(previousPoint.Y - currentPoint.Y)
+                    );
+                    break;
             }
-            else if (isElipseActive)
-            {
-                graphics.DrawEllipse(pen, Math.Min(startPoint.X, finishPoint.X), Math.Min(startPoint.Y, finishPoint.Y), Math.Abs(finishPoint.X - startPoint.X), Math.Abs(finishPoint.Y - startPoint.Y));
 
-            }
+            pictureBox.Refresh();
         }
 
         private void btnEllipse_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.Cross;
+            action = Action.Elipse;
             isElipseActive = true;
             isFreeDrawActive = false;
             isRectangleActive = false;
@@ -181,6 +229,8 @@ namespace MyPaint
 
         private void btnRectangle_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.Cross;
+            action = Action.Rectangle;
             isRectangleActive = true;
             isElipseActive = false;
             isFreeDrawActive = false;
@@ -196,16 +246,9 @@ namespace MyPaint
             }
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-        }
-
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
         private void btnErase_Click(object sender, EventArgs e)
         {
+            action = Action.Eraser;
             isEraserActive = true;
             isElipseActive = false;
             isFreeDrawActive = false;
@@ -218,29 +261,32 @@ namespace MyPaint
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png",
-                Title = "Save an Image File"
+                Title = "Save an Image File",
+                RestoreDirectory = true
             };
-            saveFileDialog.ShowDialog();
+            //saveFileDialog.ShowDialog();
 
-            if(saveFileDialog.FileName != "" && pictureBox1.Image != null)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                System.IO.FileStream file = (System.IO.FileStream)saveFileDialog.OpenFile();
-                
-                switch(saveFileDialog.FilterIndex)
+                FileStream file = (FileStream)saveFileDialog.OpenFile();
+
+                switch (saveFileDialog.FilterIndex)
                 {
                     case 1:
-                        pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        pictureBox.Image = null;
+                        pictureBox.Image = bitmap;
+                        pictureBox.Image.Save(file, ImageFormat.Jpeg);
                         break;
 
                     case 2:
-                        pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        pictureBox.Image.Save(file, ImageFormat.Png);
                         break;
                 }
                 file.Close();
             }
         }
 
-        private void btnCrop_Click(object sender, EventArgs e)
+        private void BtnCrop_Click(object sender, EventArgs e)
         {
             isCropActive = true;
             isEraserActive = false;
@@ -250,56 +296,59 @@ namespace MyPaint
         }
 
         private double zoom = 1.02;
-        private void btnZoomIn_Click(object sender, EventArgs e)
+        private void BtnZoomIn_Click(object sender, EventArgs e)
         {
-            if (pictureBox1.Image != null)
+            if (pictureBox.Image != null)
             {
                 zoom *= 1.05;
-                pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
-                pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
+                pictureBox.Width = (int)Math.Round(pictureBox.Image.Width * zoom);
+                pictureBox.Height = (int)Math.Round(pictureBox.Image.Height * zoom);
             }
         }
 
         private void btnZoomOut_Click(object sender, EventArgs e)
         {
-            if (pictureBox1.Image != null)
+            if (pictureBox.Image != null)
             {
                 zoom /= 1.05;
-                pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
-                pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
+                pictureBox.Width = (int)Math.Round(pictureBox.Image.Width * zoom);
+                pictureBox.Height = (int)Math.Round(pictureBox.Image.Height * zoom);
             }
         }
 
-        void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
+        void pictureBox_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (pictureBox1.Image != null)
-            {
-                if (e.Delta > 0)
-                {
-                    zoom *= 1.03;
-                }
-                else
-                {
-                    if (zoom != 1.0)
-                    {
-                        zoom /= 1.03;
-                    }
-                }
-                pictureBox1.Width = (int)Math.Round(pictureBox1.Image.Width * zoom);
-                pictureBox1.Height = (int)Math.Round(pictureBox1.Image.Height * zoom);
-            }
+            //    if (pictureBox.Image != null)
+            //    {
+            //        if (e.Delta > 0)
+            //        {
+            //            zoom *= 1.03;
+            //        }
+            //        else
+            //        {
+            //            if (zoom != 1.0)
+            //            {
+            //                zoom /= 1.03;
+            //            }
+            //        }
+            //        pictureBox.Width = (int)Math.Round(pictureBox.Image.Width * zoom);
+            //        pictureBox.Height = (int)Math.Round(pictureBox.Image.Height * zoom);
+            //    }
+
         }
-
-
 
         private void btnFlip180V_Click(object sender, EventArgs e)
         {
             if (bitmap != null)
             {
                 bitmap.RotateFlip(RotateFlipType.Rotate180FlipY);
-                pictureBox1.Image = bitmap;
+                pictureBox.Image = bitmap;
             }
         }
 
+        private void pictureBox_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
