@@ -335,6 +335,5 @@ namespace MyPaint
                 pictureBox.Image = bitmap;
             }
         }
-
     }
 }

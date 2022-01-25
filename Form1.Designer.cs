@@ -79,13 +79,14 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1990, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(1326, 33);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -172,7 +173,7 @@
             this.sidebarPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidebarPanel.Location = new System.Drawing.Point(0, 33);
             this.sidebarPanel.Name = "sidebarPanel";
-            this.sidebarPanel.Size = new System.Drawing.Size(213, 1285);
+            this.sidebarPanel.Size = new System.Drawing.Size(205, 845);
             this.sidebarPanel.TabIndex = 4;
             // 
             // label9
@@ -396,16 +397,18 @@
             this.picturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picturePanel.Location = new System.Drawing.Point(0, 0);
             this.picturePanel.Name = "picturePanel";
-            this.picturePanel.Size = new System.Drawing.Size(1990, 1318);
+            this.picturePanel.Size = new System.Drawing.Size(1326, 878);
             this.picturePanel.TabIndex = 6;
             // 
             // pictureBox
             // 
+            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.Color.White;
-            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox.Location = new System.Drawing.Point(211, 33);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(1990, 1318);
+            this.pictureBox.Size = new System.Drawing.Size(1112, 845);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
@@ -417,7 +420,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1990, 1318);
+            this.ClientSize = new System.Drawing.Size(1326, 878);
             this.Controls.Add(this.sidebarPanel);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.picturePanel);
