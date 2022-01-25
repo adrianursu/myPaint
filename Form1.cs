@@ -11,21 +11,12 @@ namespace MyPaint
     {
         Bitmap bitmap;
 
-
-        Action? action;
-
         Point currentPoint;
         Point previousPoint;
 
+        Action? action;
         bool isPenDown;
-        bool isFreeDrawActive;
-        bool isElipseActive;
-        bool isRectangleActive;
-        bool isEraserActive;
-        bool isCropActive;
-
-        public Pen pen;
-
+  
         public MyPaint()
         {
             InitializeComponent();
@@ -38,6 +29,7 @@ namespace MyPaint
         {
             Graphics g = Graphics.FromImage(bitmap);
             g.Clear(Color.White);
+            g.Dispose();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60,8 +52,8 @@ namespace MyPaint
             {
                 bitmap = (Bitmap)Bitmap.FromFile(openFileDialog.FileName);
                 pictureBox.Image = bitmap;
-                pictureBox.Refresh();
             }
+            openFileDialog.Dispose();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -72,43 +64,27 @@ namespace MyPaint
 
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBox.Image != null)
-            {
-                pictureBox.Image.Dispose();
-
-                bitmap = new Bitmap(pictureBox.ClientSize.Width, pictureBox.ClientSize.Height);
-                Graphics g = Graphics.FromImage(bitmap);
-                Brush brush = new SolidBrush(Color.White);
-                pictureBox.Image = bitmap;
-                g.FillRectangle(brush, 0, 0, pictureBox.ClientSize.Width, pictureBox.Image.Height);
-                action = null;
-            }
-            else
-            {
-                this.Refresh();
-            }
+            action = null;
+           
+            bitmap = new Bitmap(pictureBox.ClientSize.Width, pictureBox.ClientSize.Height);
+            Graphics graphics = Graphics.FromImage(bitmap);
+            Brush brush = new SolidBrush(Color.White);
+            graphics.FillRectangle(brush, 0, 0, pictureBox.ClientSize.Width, pictureBox.Image.Height);
+            graphics.Dispose();
+            pictureBox.Image = bitmap;
+            pictureBox.Refresh();
         }
-
-
-
         private void btnFreeDraw_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Default;
             action = Action.FreeDraw;
-            isFreeDrawActive = true;
-            isRectangleActive = false;
-            isElipseActive = false;
-            isEraserActive = false;
-            isCropActive = false;
         }
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
+            pictureBox.Refresh();
             currentPoint = e.Location;
             isPenDown = true;
-
-
-            pictureBox.Refresh();
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -124,9 +100,12 @@ namespace MyPaint
                 {
                     case Action.FreeDraw: DrawLine(graphics, new Pen(colorDialog1.Color, penWidth)); break;
                     case Action.Eraser: DrawLine(graphics, new Pen(Color.White, penWidth)); break;
-                    case Action.Rectangle: DrawRectanglePreview(e.Location); break;
+                    case Action.Rectangle:
+                    case Action.Crop:
+                        DrawRectanglePreview(e.Location); break;
                     case Action.Elipse: DrawElipsisPreview(e.Location); break;
                 }
+                graphics.Dispose();
             }
         }
 
@@ -156,7 +135,7 @@ namespace MyPaint
 
         private Pen GetPreviewPen()
         {
-            pen = new Pen(Color.Black, trackBar1.Value);
+            Pen pen = new Pen(Color.Black, trackBar1.Value);
             pen.DashStyle = DashStyle.DashDotDot;
             return pen;
         }
@@ -170,6 +149,7 @@ namespace MyPaint
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            pictureBox.Refresh();
             isPenDown = false;
 
             Graphics graphics = Graphics.FromImage(pictureBox.Image);
@@ -196,31 +176,56 @@ namespace MyPaint
                         Math.Abs(previousPoint.Y - currentPoint.Y)
                     );
                     break;
+
+                case Action.Crop: CropImage(); break;
             }
 
+            pen.Dispose();
+            graphics.Dispose();
             pictureBox.Refresh();
+        }
+
+        private void CropImage()
+        {
+            Cursor = Cursors.Default;
+
+            if (previousPoint.X == 0 && previousPoint.Y == 0)
+            {
+                return;
+            }
+
+            Rectangle rectangle = new Rectangle(
+                Math.Min(currentPoint.X, previousPoint.X),
+                Math.Min(currentPoint.Y, previousPoint.Y),
+                Math.Abs(previousPoint.X - currentPoint.X),
+                Math.Abs(previousPoint.Y - currentPoint.Y)
+            );
+
+            Bitmap croppedBitmap = new Bitmap(rectangle.Width, rectangle.Height);
+            Graphics graphics = Graphics.FromImage(croppedBitmap);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+            graphics.DrawImage(bitmap, 0, 0, rectangle, GraphicsUnit.Pixel);
+            pictureBox.Image = croppedBitmap;
+            pictureBox.Width = croppedBitmap.Width;
+            pictureBox.Height = croppedBitmap.Height;
+            bitmap = croppedBitmap;
+            graphics.Dispose();
+            action = null;
         }
 
         private void btnEllipse_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Cross;
             action = Action.Elipse;
-            isElipseActive = true;
-            isFreeDrawActive = false;
-            isRectangleActive = false;
-            isEraserActive = false;
-            isCropActive = false;
         }
 
         private void btnRectangle_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Cross;
             action = Action.Rectangle;
-            isRectangleActive = true;
-            isElipseActive = false;
-            isFreeDrawActive = false;
-            isEraserActive = false;
-            isCropActive = false;
         }
 
         private void btnChooseColor_Click(object sender, EventArgs e)
@@ -234,11 +239,6 @@ namespace MyPaint
         private void btnErase_Click(object sender, EventArgs e)
         {
             action = Action.Eraser;
-            isEraserActive = true;
-            isElipseActive = false;
-            isFreeDrawActive = false;
-            isRectangleActive = false;
-            isCropActive = false;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -272,21 +272,17 @@ namespace MyPaint
 
         private void BtnCrop_Click(object sender, EventArgs e)
         {
-            isCropActive = true;
-            isEraserActive = false;
-            isElipseActive = false;
-            isFreeDrawActive = false;
-            isRectangleActive = false;
+            action = Action.Crop;
+            previousPoint = new Point();
         }
 
-        private double zoom = 1.02;
         private void BtnZoomIn_Click(object sender, EventArgs e)
         {
             if (pictureBox.Image != null)
             {
-                zoom *= 1.05;
-                pictureBox.Width = (int)Math.Round(pictureBox.Image.Width * zoom);
-                pictureBox.Height = (int)Math.Round(pictureBox.Image.Height * zoom);
+                Size size = new Size((int)Math.Round(pictureBox.Image.Width * 1.05), (int)Math.Round(pictureBox.Image.Height * 1.05));
+                pictureBox.Image = new Bitmap(bitmap, size);
+                bitmap = (Bitmap)pictureBox.Image;
             }
         }
 
@@ -294,9 +290,9 @@ namespace MyPaint
         {
             if (pictureBox.Image != null)
             {
-                zoom /= 1.05;
-                pictureBox.Width = (int)Math.Round(pictureBox.Image.Width * zoom);
-                pictureBox.Height = (int)Math.Round(pictureBox.Image.Height * zoom);
+                Size size = new Size((int)Math.Round(pictureBox.Image.Width * 0.9), (int)Math.Round(pictureBox.Image.Height * 0.9));
+                pictureBox.Image = new Bitmap(bitmap, size);
+                bitmap = (Bitmap)pictureBox.Image;
             }
         }
 
