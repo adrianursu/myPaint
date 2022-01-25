@@ -89,32 +89,7 @@ namespace MyPaint
             }
         }
 
-        private void btnFlip180_Click(object sender, EventArgs e)
-        {
-            if (bitmap != null)
-            {
-                bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
-                pictureBox.Image = bitmap;
-            }
-        }
 
-        private void btnRotate90degR_Click(object sender, EventArgs e)
-        {
-            if (bitmap != null)
-            {
-                bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                pictureBox.Image = bitmap;
-            }
-        }
-
-        private void btnRotate90degL_Click(object sender, EventArgs e)
-        {
-            if (bitmap != null)
-            {
-                bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                pictureBox.Image = bitmap;
-            }
-        }
 
         private void btnFreeDraw_Click(object sender, EventArgs e)
         {
@@ -181,7 +156,7 @@ namespace MyPaint
 
         private Pen GetPreviewPen()
         {
-            pen = new Pen(Color.Black, 2);
+            pen = new Pen(Color.Black, trackBar1.Value);
             pen.DashStyle = DashStyle.DashDotDot;
             return pen;
         }
@@ -325,27 +300,6 @@ namespace MyPaint
             }
         }
 
-        void pictureBox_MouseWheel(object sender, MouseEventArgs e)
-        {
-            //    if (pictureBox.Image != null)
-            //    {
-            //        if (e.Delta > 0)
-            //        {
-            //            zoom *= 1.03;
-            //        }
-            //        else
-            //        {
-            //            if (zoom != 1.0)
-            //            {
-            //                zoom /= 1.03;
-            //            }
-            //        }
-            //        pictureBox.Width = (int)Math.Round(pictureBox.Image.Width * zoom);
-            //        pictureBox.Height = (int)Math.Round(pictureBox.Image.Height * zoom);
-            //    }
-
-        }
-
         private void btnFlip180V_Click(object sender, EventArgs e)
         {
             if (bitmap != null)
@@ -354,10 +308,33 @@ namespace MyPaint
                 pictureBox.Image = bitmap;
             }
         }
-
-        private void pictureBox_Paint(object sender, PaintEventArgs e)
+        private void btnFlip180H_Click(object sender, EventArgs e)
         {
 
+            if (bitmap != null)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+                pictureBox.Image = bitmap;
+            }
         }
+
+        private void btnRotate90degR_Click(object sender, EventArgs e)
+        {
+            if (bitmap != null)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                pictureBox.Image = bitmap;
+            }
+        }
+
+        private void btnRotate90degL_Click(object sender, EventArgs e)
+        {
+            if (bitmap != null)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                pictureBox.Image = bitmap;
+            }
+        }
+
     }
 }
