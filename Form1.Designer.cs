@@ -173,7 +173,7 @@
             this.sidebarPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidebarPanel.Location = new System.Drawing.Point(0, 33);
             this.sidebarPanel.Name = "sidebarPanel";
-            this.sidebarPanel.Size = new System.Drawing.Size(205, 845);
+            this.sidebarPanel.Size = new System.Drawing.Size(209, 845);
             this.sidebarPanel.TabIndex = 4;
             // 
             // label9
@@ -406,9 +406,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.Color.White;
-            this.pictureBox.Location = new System.Drawing.Point(211, 33);
+            this.pictureBox.Location = new System.Drawing.Point(215, 33);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(1112, 845);
+            this.pictureBox.Size = new System.Drawing.Size(1099, 842);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;

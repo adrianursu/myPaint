@@ -38,6 +38,7 @@ namespace MyPaint
         {
             Graphics g = Graphics.FromImage(bitmap);
             g.Clear(Color.White);
+            g.Dispose();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -58,10 +59,19 @@ namespace MyPaint
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                //pictureBox.Refresh();
+                //bitmap = null;
+                //Graphics g = Graphics.FromImage(bitmap);
+                //g.Clear(Color.White);
+                //pictureBox.Invalidate();
                 bitmap = (Bitmap)Bitmap.FromFile(openFileDialog.FileName);
+                //g.DrawImage(bitmap, 0, 0);
+                //g.Dispose();
                 pictureBox.Image = bitmap;
                 pictureBox.Refresh();
+                
             }
+            openFileDialog.Dispose();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -107,8 +117,7 @@ namespace MyPaint
             currentPoint = e.Location;
             isPenDown = true;
 
-
-            pictureBox.Refresh();
+            //pictureBox.Refresh();
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -124,9 +133,12 @@ namespace MyPaint
                 {
                     case Action.FreeDraw: DrawLine(graphics, new Pen(colorDialog1.Color, penWidth)); break;
                     case Action.Eraser: DrawLine(graphics, new Pen(Color.White, penWidth)); break;
-                    case Action.Rectangle: DrawRectanglePreview(e.Location); break;
+                    case Action.Rectangle:
+                    case Action.Crop: 
+                        DrawRectanglePreview(e.Location); break;
                     case Action.Elipse: DrawElipsisPreview(e.Location); break;
                 }
+                graphics.Dispose();
             }
         }
 
@@ -196,9 +208,43 @@ namespace MyPaint
                         Math.Abs(previousPoint.Y - currentPoint.Y)
                     );
                     break;
+
+                case Action.Crop: CropImage(); break;
             }
 
+            graphics.Dispose();
+            pen.Dispose();
             pictureBox.Refresh();
+        }
+
+        private void CropImage()
+        {
+            Cursor = Cursors.Default;
+            
+            if (Math.Abs(previousPoint.X - currentPoint.X) == 0)
+            {
+                return;
+            }
+
+            Rectangle rectangle = new Rectangle(
+                Math.Min(currentPoint.X, previousPoint.X),
+                Math.Min(currentPoint.Y, previousPoint.Y),
+                Math.Abs(previousPoint.X - currentPoint.X),
+                Math.Abs(previousPoint.Y - currentPoint.Y)
+            );
+
+            Bitmap croppedBitmap = new Bitmap(rectangle.Width, rectangle.Height);
+            Graphics graphics = Graphics.FromImage(croppedBitmap);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+            graphics.DrawImage(bitmap, 0, 0, rectangle, GraphicsUnit.Pixel);
+            pictureBox.Image = croppedBitmap;
+            //pictureBox.Width = croppedBitmap.Width;
+            //pictureBox.Height = croppedBitmap.Height;
+            //pictureBox.Size = bitmap.Size;
+
         }
 
         private void btnEllipse_Click(object sender, EventArgs e)
@@ -272,6 +318,7 @@ namespace MyPaint
 
         private void BtnCrop_Click(object sender, EventArgs e)
         {
+            action = Action.Crop;
             isCropActive = true;
             isEraserActive = false;
             isElipseActive = false;
