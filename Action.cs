@@ -5,6 +5,8 @@
         FreeDraw,
         Eraser,
         Elipse,
-        Rectangle
+        Rectangle,
+        Crop,
+        Zoom
     }
 }
