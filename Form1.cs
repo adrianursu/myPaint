@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -34,6 +32,12 @@ namespace MyPaint
             bitmap = new Bitmap(pictureBox.ClientSize.Width, pictureBox.ClientSize.Height);
             pictureBox.Image = bitmap;
             action = null;
+        }
+
+        private void MyPaint_Load(object sender, EventArgs e)
+        {
+            Graphics g = Graphics.FromImage(bitmap);
+            g.Clear(Color.White);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -71,7 +75,13 @@ namespace MyPaint
             if (pictureBox.Image != null)
             {
                 pictureBox.Image.Dispose();
-                pictureBox.Image = null;
+
+                bitmap = new Bitmap(pictureBox.ClientSize.Width, pictureBox.ClientSize.Height);
+                Graphics g = Graphics.FromImage(bitmap);
+                Brush brush = new SolidBrush(Color.White);
+                pictureBox.Image = bitmap;
+                g.FillRectangle(brush, 0, 0, pictureBox.ClientSize.Width, pictureBox.Image.Height);
+                action = null;
             }
             else
             {
@@ -264,7 +274,6 @@ namespace MyPaint
                 Title = "Save an Image File",
                 RestoreDirectory = true
             };
-            //saveFileDialog.ShowDialog();
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {

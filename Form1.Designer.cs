@@ -430,6 +430,7 @@
             this.Name = "MyPaint";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MyPaint";
+            this.Load += new System.EventHandler(this.MyPaint_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.sidebarPanel.ResumeLayout(false);
