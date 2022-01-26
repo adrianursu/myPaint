@@ -108,7 +108,7 @@
             this.newProjectToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(272, 34);
             this.newProjectToolStripMenuItem.Text = "New Project";
-            this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
+            this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.NewProjectToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -116,7 +116,7 @@
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(272, 34);
             this.openToolStripMenuItem.Text = "Open...";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
@@ -124,7 +124,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(272, 34);
             this.saveToolStripMenuItem.Text = "Save As...";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -136,14 +136,14 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(272, 34);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(215, 29);
             this.helpToolStripMenuItem.Text = "Instructions and Credits";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItem_Click);
             // 
             // sidebarPanel
             // 
@@ -265,7 +265,7 @@
             this.btnFlip180V.Size = new System.Drawing.Size(60, 60);
             this.btnFlip180V.TabIndex = 11;
             this.btnFlip180V.UseVisualStyleBackColor = true;
-            this.btnFlip180V.Click += new System.EventHandler(this.btnFlip180V_Click);
+            this.btnFlip180V.Click += new System.EventHandler(this.BtnFlip180V_Click);
             // 
             // btnZoomOut
             // 
@@ -275,7 +275,7 @@
             this.btnZoomOut.Size = new System.Drawing.Size(60, 60);
             this.btnZoomOut.TabIndex = 10;
             this.btnZoomOut.UseVisualStyleBackColor = true;
-            this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
+            this.btnZoomOut.Click += new System.EventHandler(this.BtnZoomOut_Click);
             // 
             // btnZoomIn
             // 
@@ -314,7 +314,7 @@
             this.btnErase.Size = new System.Drawing.Size(60, 60);
             this.btnErase.TabIndex = 7;
             this.btnErase.UseVisualStyleBackColor = true;
-            this.btnErase.Click += new System.EventHandler(this.btnErase_Click);
+            this.btnErase.Click += new System.EventHandler(this.BtnErase_Click);
             // 
             // btnRectangle
             // 
@@ -325,7 +325,7 @@
             this.btnRectangle.Size = new System.Drawing.Size(60, 60);
             this.btnRectangle.TabIndex = 6;
             this.btnRectangle.UseVisualStyleBackColor = false;
-            this.btnRectangle.Click += new System.EventHandler(this.btnRectangle_Click);
+            this.btnRectangle.Click += new System.EventHandler(this.BtnRectangle_Click);
             // 
             // btnEllipse
             // 
@@ -336,7 +336,7 @@
             this.btnEllipse.Size = new System.Drawing.Size(60, 60);
             this.btnEllipse.TabIndex = 5;
             this.btnEllipse.UseVisualStyleBackColor = false;
-            this.btnEllipse.Click += new System.EventHandler(this.btnEllipse_Click);
+            this.btnEllipse.Click += new System.EventHandler(this.BtnEllipse_Click);
             // 
             // btnRotate90degL
             // 
@@ -346,7 +346,7 @@
             this.btnRotate90degL.Size = new System.Drawing.Size(60, 60);
             this.btnRotate90degL.TabIndex = 4;
             this.btnRotate90degL.UseVisualStyleBackColor = true;
-            this.btnRotate90degL.Click += new System.EventHandler(this.btnRotate90degL_Click);
+            this.btnRotate90degL.Click += new System.EventHandler(this.BtnRotate90degL_Click);
             // 
             // btnRotate90degR
             // 
@@ -356,7 +356,7 @@
             this.btnRotate90degR.Size = new System.Drawing.Size(60, 60);
             this.btnRotate90degR.TabIndex = 3;
             this.btnRotate90degR.UseVisualStyleBackColor = true;
-            this.btnRotate90degR.Click += new System.EventHandler(this.btnRotate90degR_Click);
+            this.btnRotate90degR.Click += new System.EventHandler(this.BtnRotate90degR_Click);
             // 
             // btnChooseColor
             // 
@@ -367,7 +367,7 @@
             this.btnChooseColor.Size = new System.Drawing.Size(60, 60);
             this.btnChooseColor.TabIndex = 2;
             this.btnChooseColor.UseVisualStyleBackColor = false;
-            this.btnChooseColor.Click += new System.EventHandler(this.btnChooseColor_Click);
+            this.btnChooseColor.Click += new System.EventHandler(this.BtnChooseColor_Click);
             // 
             // btnFreeDraw
             // 
@@ -378,7 +378,7 @@
             this.btnFreeDraw.Size = new System.Drawing.Size(60, 60);
             this.btnFreeDraw.TabIndex = 1;
             this.btnFreeDraw.UseVisualStyleBackColor = false;
-            this.btnFreeDraw.Click += new System.EventHandler(this.btnFreeDraw_Click);
+            this.btnFreeDraw.Click += new System.EventHandler(this.BtnFreeDraw_Click);
             // 
             // btnFlip180H
             // 
@@ -388,7 +388,7 @@
             this.btnFlip180H.Size = new System.Drawing.Size(60, 60);
             this.btnFlip180H.TabIndex = 0;
             this.btnFlip180H.UseVisualStyleBackColor = true;
-            this.btnFlip180H.Click += new System.EventHandler(this.btnFlip180H_Click);
+            this.btnFlip180H.Click += new System.EventHandler(this.BtnFlip180H_Click);
             // 
             // picturePanel
             // 
@@ -412,9 +412,9 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
-            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox_MouseDown);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox_MouseUp);
             // 
             // MyPaint
             // 

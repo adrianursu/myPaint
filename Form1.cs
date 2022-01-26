@@ -32,12 +32,12 @@ namespace MyPaint
             g.Dispose();
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -56,13 +56,13 @@ namespace MyPaint
             openFileDialog.Dispose();
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 form2 = new Form2();
             form2.ShowDialog();
         }
 
-        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             action = null;
            
@@ -74,20 +74,20 @@ namespace MyPaint
             pictureBox.Image = bitmap;
             pictureBox.Refresh();
         }
-        private void btnFreeDraw_Click(object sender, EventArgs e)
+        private void BtnFreeDraw_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Default;
             action = Action.FreeDraw;
         }
 
-        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
+        private void PictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             pictureBox.Refresh();
             currentPoint = e.Location;
             isPenDown = true;
         }
 
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        private void PictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isPenDown)
             {
@@ -103,7 +103,7 @@ namespace MyPaint
                     case Action.Rectangle:
                     case Action.Crop:
                         DrawRectanglePreview(e.Location); break;
-                    case Action.Elipse: DrawElipsisPreview(e.Location); break;
+                    case Action.Elipse: DrawElipsePreview(e.Location); break;
                 }
                 graphics.Dispose();
             }
@@ -121,7 +121,7 @@ namespace MyPaint
             );
         }
 
-        private void DrawElipsisPreview(Point point)
+        private void DrawElipsePreview(Point point)
         {
             pictureBox.Refresh();
             pictureBox.CreateGraphics().DrawEllipse(
@@ -147,7 +147,7 @@ namespace MyPaint
             pictureBox.Refresh();
         }
 
-        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
+        private void PictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             pictureBox.Refresh();
             isPenDown = false;
@@ -216,19 +216,19 @@ namespace MyPaint
             action = null;
         }
 
-        private void btnEllipse_Click(object sender, EventArgs e)
+        private void BtnEllipse_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Cross;
             action = Action.Elipse;
         }
 
-        private void btnRectangle_Click(object sender, EventArgs e)
+        private void BtnRectangle_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Cross;
             action = Action.Rectangle;
         }
 
-        private void btnChooseColor_Click(object sender, EventArgs e)
+        private void BtnChooseColor_Click(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -236,12 +236,12 @@ namespace MyPaint
             }
         }
 
-        private void btnErase_Click(object sender, EventArgs e)
+        private void BtnErase_Click(object sender, EventArgs e)
         {
             action = Action.Eraser;
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
@@ -286,7 +286,7 @@ namespace MyPaint
             }
         }
 
-        private void btnZoomOut_Click(object sender, EventArgs e)
+        private void BtnZoomOut_Click(object sender, EventArgs e)
         {
             if (pictureBox.Image != null)
             {
@@ -296,7 +296,7 @@ namespace MyPaint
             }
         }
 
-        private void btnFlip180V_Click(object sender, EventArgs e)
+        private void BtnFlip180V_Click(object sender, EventArgs e)
         {
             if (bitmap != null)
             {
@@ -304,7 +304,7 @@ namespace MyPaint
                 pictureBox.Image = bitmap;
             }
         }
-        private void btnFlip180H_Click(object sender, EventArgs e)
+        private void BtnFlip180H_Click(object sender, EventArgs e)
         {
 
             if (bitmap != null)
@@ -314,7 +314,7 @@ namespace MyPaint
             }
         }
 
-        private void btnRotate90degR_Click(object sender, EventArgs e)
+        private void BtnRotate90degR_Click(object sender, EventArgs e)
         {
             if (bitmap != null)
             {
@@ -323,7 +323,7 @@ namespace MyPaint
             }
         }
 
-        private void btnRotate90degL_Click(object sender, EventArgs e)
+        private void BtnRotate90degL_Click(object sender, EventArgs e)
         {
             if (bitmap != null)
             {
