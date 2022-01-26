@@ -37,6 +37,12 @@ namespace MyPaint
             this.Close();
         }
 
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.ShowDialog();
+        }
+
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -56,12 +62,6 @@ namespace MyPaint
             openFileDialog.Dispose();
         }
 
-        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form2 form2 = new Form2();
-            form2.ShowDialog();
-        }
-
         private void NewProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             action = null;
@@ -74,6 +74,36 @@ namespace MyPaint
             pictureBox.Image = bitmap;
             pictureBox.Refresh();
         }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png",
+                Title = "Save an Image File",
+                RestoreDirectory = true
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                FileStream file = (FileStream)saveFileDialog.OpenFile();
+
+                switch (saveFileDialog.FilterIndex)
+                {
+                    case 1:
+                        pictureBox.Image = null;
+                        pictureBox.Image = bitmap;
+                        pictureBox.Image.Save(file, ImageFormat.Jpeg);
+                        break;
+
+                    case 2:
+                        pictureBox.Image.Save(file, ImageFormat.Png);
+                        break;
+                }
+                file.Close();
+            }
+        }
+
         private void BtnFreeDraw_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Default;
@@ -108,6 +138,12 @@ namespace MyPaint
                 graphics.Dispose();
             }
         }
+        private void DrawLine(Graphics graphics, Pen pen)
+        {
+            graphics.DrawLine(pen, currentPoint, previousPoint);
+            currentPoint = previousPoint;
+            pictureBox.Refresh();
+        }
 
         private void DrawRectanglePreview(Point point)
         {
@@ -138,13 +174,6 @@ namespace MyPaint
             Pen pen = new Pen(Color.Black, trackBar1.Value);
             pen.DashStyle = DashStyle.DashDotDot;
             return pen;
-        }
-
-        private void DrawLine(Graphics graphics, Pen pen)
-        {
-            graphics.DrawLine(pen, currentPoint, previousPoint);
-            currentPoint = previousPoint;
-            pictureBox.Refresh();
         }
 
         private void PictureBox_MouseUp(object sender, MouseEventArgs e)
@@ -232,42 +261,13 @@ namespace MyPaint
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
-                Color color = colorDialog1.Color;
+                _ = colorDialog1.Color;
             }
         }
 
         private void BtnErase_Click(object sender, EventArgs e)
         {
             action = Action.Eraser;
-        }
-
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png",
-                Title = "Save an Image File",
-                RestoreDirectory = true
-            };
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                FileStream file = (FileStream)saveFileDialog.OpenFile();
-
-                switch (saveFileDialog.FilterIndex)
-                {
-                    case 1:
-                        pictureBox.Image = null;
-                        pictureBox.Image = bitmap;
-                        pictureBox.Image.Save(file, ImageFormat.Jpeg);
-                        break;
-
-                    case 2:
-                        pictureBox.Image.Save(file, ImageFormat.Png);
-                        break;
-                }
-                file.Close();
-            }
         }
 
         private void BtnCrop_Click(object sender, EventArgs e)
